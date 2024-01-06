@@ -11,20 +11,4 @@ const connection = mysql.createConnection({
 });
 
 
-connection.connect((err) => {
-    if (err) {
-        console.error('Error connecting to database:', err);
-        return;
-    }
-    console.log('Connected to database');
-
-    // Start de Express-app nadat de databaseverbinding is opgezet
-    const app = require('./index');  // Het is beter om de app rechtstreeks vanuit index.js te importeren om cirkelafhankelijkheden te voorkomen
-    const port = 3001;
-
-    app.listen(port, () => {
-        console.log(`Server is running on port ${port}`);
-    });
-});
-
 module.exports = connection;

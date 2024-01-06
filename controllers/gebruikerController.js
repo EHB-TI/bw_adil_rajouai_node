@@ -3,6 +3,31 @@ const Gebruiker = require('../models/gebruikerModel');
 const createGebruiker = (req, res) => {
     const newGebruiker = req.body;
 
+
+    const requiredFields = ['naam', 'email', 'leeftijd', 'nummer'];
+    if (requiredFields.some(field => newGebruiker[field] == null || newGebruiker[field] === '')) {
+        return res.status(400).send({
+            message: 'Vul alle vereiste velden in: naam, email, leeftijd, nummer.',
+        });
+    }
+
+    // Typecast numerieke velden naar getallen
+    newGebruiker.leeftijd = parseInt(newGebruiker.leeftijd, 10);
+    newGebruiker.nummer = parseInt(newGebruiker.nummer, 10);
+
+    // Controleer of numerieke velden geldige getallen zijn
+    if (isNaN(newGebruiker.leeftijd) || isNaN(newGebruiker.nummer)) {
+        return res.status(400).send({
+            message: 'Leeftijd en nummer moeten geldige getallen zijn.',
+        });
+    }
+
+    if (/\d/.test(newGebruiker.naam)) {
+        return res.status(400).send({
+            message: 'Voornaam mag geen cijfers bevatten.',
+        });
+    }
+
     Gebruiker.create(newGebruiker, (err, data) => {
         if (err) {
             res.status(500).send({
@@ -87,6 +112,7 @@ const deleteGebruikerById = (req, res) => {
         }
     });
 };
+
 
 module.exports = {
     createGebruiker,

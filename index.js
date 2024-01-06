@@ -11,8 +11,18 @@ app.use(bodyParser.json());
 
 app.use('/api', berichtRoutes); 
 app.use('/api', gebruikerRoutes); 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+
+
+db.connect((err) => {
+    if (err) {
+        console.error('Error connecting to database:', err);
+        return;
+    }
+    console.log('Connected to database');
+
+    app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+    });
 });
 
 

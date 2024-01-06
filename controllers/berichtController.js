@@ -3,6 +3,27 @@ const Bericht = require('../models/berichtModel');
 const createBericht = (req, res) => {
     const newBericht = req.body;
 
+    // Controleer op lege velden
+    const requiredFields = ['inhoud', 'gebruiker_id','titel', 'afzender', 'ontvanger', 'telefoonnummer'];
+    if (requiredFields.some(field => newBericht[field] == null || newBericht[field] === '')) {
+        return res.status(400).send({ message: 'Vul alle vereiste velden in: inhoud, afzender, ontvanger, telefoonnummer.' });
+    }
+
+    newBericht.telefoonnummer = parseInt(newBericht.telefoonnummer, 10);
+
+    if (isNaN(newBericht.telefoonnummer) ) {
+        return res.status(400).send({
+            message: ' telefoonnummer moet geldige getallen zijn.',
+        });
+    }
+
+    if (/\d/.test(newBericht.afzender)) {
+        return res.status(400).send({
+            message: 'Afzender mag geen cijfers bevatten.',
+        });
+    }
+
+
     Bericht.create(newBericht, (err, data) => {
         if (err) {
             res.status(500).send({

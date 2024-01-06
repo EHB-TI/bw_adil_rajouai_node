@@ -18,6 +18,9 @@ CREATE TABLE IF NOT EXISTS berichten (
     id INT AUTO_INCREMENT PRIMARY KEY,
     tekst TEXT NOT NULL,
     gebruiker_id INT,
+    afzender VARCHAR(255),
+    ontvanger VARCHAR(255),
+    telefoonnummer VARCHAR(20),
     FOREIGN KEY (gebruiker_id) REFERENCES gebruikers(id)
 );
 

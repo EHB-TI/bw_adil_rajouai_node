@@ -1,5 +1,8 @@
 const db = require('../db');
 
+
+
+
 const Gebruiker = {
     create: (newGebruiker, result) => {
         db.query('INSERT INTO gebruikers SET ?', newGebruiker, (err, res) => {
@@ -46,6 +49,7 @@ const Gebruiker = {
     
     updateById: (id, gebruiker, result) => {
         db.query('UPDATE gebruikers SET ? WHERE id = ?', [gebruiker, id], (err, res) => {
+            
             if (err) {
                 console.error('Error updating gebruiker: ', err);
                 result(err, null);
@@ -80,6 +84,8 @@ const Gebruiker = {
             result(null, res);
         });
     },
+    
+
 };
 
 module.exports = Gebruiker;

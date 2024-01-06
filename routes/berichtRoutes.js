@@ -9,3 +9,6 @@ router.put('/berichten/:id', berichtController.updateBerichtById);
 router.delete('/berichten/:id', berichtController.deleteBerichtById);
 
 module.exports = router;
+
+
+
