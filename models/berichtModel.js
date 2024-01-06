@@ -61,6 +61,18 @@ const Bericht = {
             result(null, { id, ...bericht });
         });
     },
+    getAllWithLimitAndOffset: (limit, offset, result) => {
+        db.query('SELECT * FROM berichten LIMIT ? OFFSET ?', [limit, offset], (err, res) => {
+            if (err) {
+                console.error('Error getting berichten with limit and offset: ', err);
+                result(err, null);
+                return;
+            }
+
+            console.log('Berichten with limit and offset: ', res);
+            result(null, res);
+        });
+    },
     deleteById: (id, result) => {
         db.query('DELETE FROM berichten WHERE id = ?', id, (err, res) => {
             if (err) {

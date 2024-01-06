@@ -66,6 +66,20 @@ const getBerichtById = (req, res) => {
         }
     });
 };
+const getAllBerichtenWithLimitAndOffset = (req, res) => {
+    const limit = parseInt(req.query.limit) || 5;
+    const offset = parseInt(req.query.offset) || 0;
+
+    Bericht.getAllWithLimitAndOffset(limit, offset, (err, data) => {
+        if (err) {
+            res.status(500).send({
+                message: err.message || 'Error getting berichten with limit and offset.',
+            });
+        } else {
+            res.send(data);
+        }
+    });
+};
 
 const updateBerichtById = (req, res) => {
     const berichtId = req.params.id;
@@ -114,4 +128,5 @@ module.exports = {
     getBerichtById,
     updateBerichtById,
     deleteBerichtById,
+    getAllBerichtenWithLimitAndOffset
 };
