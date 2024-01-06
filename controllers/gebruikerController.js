@@ -92,6 +92,21 @@ const updateGebruikerById = (req, res) => {
         }
     });
 };
+const getAllGebruikersWithLimitAndOffset = (req, res) => {
+    const limit = parseInt(req.query.limit) || 10; 
+    const offset = parseInt(req.query.offset) || 0;
+
+    Gebruiker.getAllWithLimitAndOffset(limit, offset, (err, data) => {
+        if (err) {
+            res.status(500).send({
+                message: err.message || 'Error getting gebruikers with limit and offset.',
+            });
+        } else {
+            res.send(data);
+        }
+    });
+};
+
 
 const deleteGebruikerById = (req, res) => {
     const gebruikerId = req.params.id;
@@ -110,8 +125,9 @@ const deleteGebruikerById = (req, res) => {
         } else {
             res.send({ message: 'Gebruiker deleted successfully!' });
         }
-    });
-};
+    }
+    );
+}
 
 
 module.exports = {
@@ -120,4 +136,6 @@ module.exports = {
     getGebruikerById,
     updateGebruikerById,
     deleteGebruikerById,
+    getAllGebruikersWithLimitAndOffset
+
 };

@@ -84,8 +84,21 @@ const Gebruiker = {
             result(null, res);
         });
     },
+    getAllWithLimitAndOffset: (limit, offset, result) => {
+        db.query('SELECT * FROM gebruikers LIMIT ? OFFSET ?', [limit, offset], (err, res) => {
+            if (err) {
+                console.error('Error getting gebruikers with limit and offset: ', err);
+                result(err, null);
+                return;
+            }
+
+            console.log('Gebruikers with limit and offset: ', res);
+            result(null, res);
+        });
+    },
+};
     
 
-};
+
 
 module.exports = Gebruiker;
