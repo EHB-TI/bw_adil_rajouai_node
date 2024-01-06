@@ -39,7 +39,6 @@ const Bericht = {
                 return;
             }
 
-            // Not found
             result({ kind: 'not_found' }, null);
         });
     },
@@ -52,7 +51,6 @@ const Bericht = {
             }
 
             if (res.affectedRows == 0) {
-                // Not found
                 result({ kind: 'not_found' }, null);
                 return;
             }
@@ -73,6 +71,17 @@ const Bericht = {
             result(null, res);
         });
     },
+    searchByField : (field, value, result) => {
+        const query = `SELECT * FROM berichten WHERE ${field} = ?`;
+        db.query(query, [value], (err, res) => {
+            if (err) {
+                console.error('Error searching berichten: ', err);
+                result(err, null);
+                return;
+            }
+            result(null, res);
+        });
+    },
     deleteById: (id, result) => {
         db.query('DELETE FROM berichten WHERE id = ?', id, (err, res) => {
             if (err) {
@@ -82,7 +91,6 @@ const Bericht = {
             }
 
             if (res.affectedRows == 0) {
-                // Not found
                 result({ kind: 'not_found' }, null);
                 return;
             }

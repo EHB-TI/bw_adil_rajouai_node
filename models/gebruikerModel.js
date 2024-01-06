@@ -42,7 +42,6 @@ const Gebruiker = {
                 return;
             }
     
-            // Not found
             result({ kind: 'not_found' }, null);
         });
     },
@@ -57,7 +56,6 @@ const Gebruiker = {
             }
 
             if (res.affectedRows == 0) {
-                // Not found
                 result({ kind: 'not_found' }, null);
                 return;
             }
@@ -75,7 +73,6 @@ const Gebruiker = {
             }
 
             if (res.affectedRows == 0) {
-                // Not found
                 result({ kind: 'not_found' }, null);
                 return;
             }
@@ -84,6 +81,26 @@ const Gebruiker = {
             result(null, res);
         });
     },
+    getByField: (field, value, result) => {
+        db.query(`SELECT * FROM gebruikers WHERE ${field} = ?`, value, (err, res) => {
+            if (err) {
+                console.error(`Error getting gebruiker by ${field}: `, err);
+                result(err, null);
+                return;
+            }
+    
+            if (res.length) {
+                console.log(`Gebruiker with ${field} ${value}: `, res[0]);
+                result(null, res);
+                return;
+            }
+    
+            result({ kind: 'not_found' }, null);
+        });
+    },
+    
+    
+    
     getAllWithLimitAndOffset: (limit, offset, result) => {
         db.query('SELECT * FROM gebruikers LIMIT ? OFFSET ?', [limit, offset], (err, res) => {
             if (err) {

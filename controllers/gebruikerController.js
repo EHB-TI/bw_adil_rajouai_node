@@ -11,11 +11,9 @@ const createGebruiker = (req, res) => {
         });
     }
 
-    // Typecast numerieke velden naar getallen
     newGebruiker.leeftijd = parseInt(newGebruiker.leeftijd, 10);
     newGebruiker.nummer = parseInt(newGebruiker.nummer, 10);
 
-    // Controleer of numerieke velden geldige getallen zijn
     if (isNaN(newGebruiker.leeftijd) || isNaN(newGebruiker.nummer)) {
         return res.status(400).send({
             message: 'Leeftijd en nummer moeten geldige getallen zijn.',
@@ -93,7 +91,7 @@ const updateGebruikerById = (req, res) => {
     });
 };
 const getAllGebruikersWithLimitAndOffset = (req, res) => {
-    const limit = parseInt(req.query.limit) || 10; 
+    const limit = parseInt(req.query.limit) || 5;
     const offset = parseInt(req.query.offset) || 0;
 
     Gebruiker.getAllWithLimitAndOffset(limit, offset, (err, data) => {
@@ -106,6 +104,31 @@ const getAllGebruikersWithLimitAndOffset = (req, res) => {
         }
     });
 };
+
+const getGebruikerByField = (req, res) => {
+    const field = req.query.field;
+    const value = req.query.value;
+
+    console.log("Received field:", field);
+    console.log("Received value:", value);
+
+    Gebruiker.getByField(field, value, (err, data) => {
+        if (err) {
+            if (err.kind === 'not_found') {
+                res.status(404).send({
+                    message: `Gebruiker with ${field} ${value} not found.`,
+                });
+            } else {
+                res.status(500).send({
+                    message: `Error getting gebruiker by ${field} ${value}.`,
+                });
+            }
+        } else {
+            res.send(data);
+        }
+    });
+};
+
 
 
 const deleteGebruikerById = (req, res) => {
@@ -136,6 +159,7 @@ module.exports = {
     getGebruikerById,
     updateGebruikerById,
     deleteGebruikerById,
-    getAllGebruikersWithLimitAndOffset
+    getAllGebruikersWithLimitAndOffset,
+    getGebruikerByField
 
 };
