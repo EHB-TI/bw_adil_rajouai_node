@@ -25,6 +25,24 @@ const Bericht = {
             result(null, res);
         });
     },
+    getByField: (field, value, result) => {
+        console.log("Executing query:", `SELECT * FROM berichten WHERE ${field} = '${value}'`);
+        db.query(`SELECT * FROM berichten WHERE ${field} = ?`, value, (err, res) => {
+            if (err) {
+                console.error(`Error getting bericht by ${field}: `, err);
+                result(err, null);
+                return;
+            }
+    
+            if (res.length) {
+                console.log(`Bericht with ${field} ${value}: `, res[0]);
+                result(null, res);
+                return;
+            }
+    
+            result({ kind: 'not_found' }, null);
+        });
+    },
     getById: (berichtId, result) => {
         db.query('SELECT * FROM berichten WHERE id = ?', berichtId, (err, res) => {
             if (err) {
@@ -71,17 +89,8 @@ const Bericht = {
             result(null, res);
         });
     },
-    searchByField : (field, value, result) => {
-        const query = `SELECT * FROM berichten WHERE ${field} = ?`;
-        db.query(query, [value], (err, res) => {
-            if (err) {
-                console.error('Error searching berichten: ', err);
-                result(err, null);
-                return;
-            }
-            result(null, res);
-        });
-    },
+   
+    
     deleteById: (id, result) => {
         db.query('DELETE FROM berichten WHERE id = ?', id, (err, res) => {
             if (err) {

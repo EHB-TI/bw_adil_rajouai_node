@@ -3,7 +3,6 @@ const Bericht = require('../models/berichtModel');
 const createBericht = (req, res) => {
     const newBericht = req.body;
 
-    // Controleer op lege velden
     const requiredFields = ['inhoud', 'gebruiker_id','titel', 'afzender', 'ontvanger', 'telefoonnummer'];
     if (requiredFields.some(field => newBericht[field] == null || newBericht[field] === '')) {
         return res.status(400).send({ message: 'Vul alle vereiste velden in: inhoud, afzender, ontvanger, telefoonnummer.' });
@@ -46,6 +45,31 @@ const getAllBerichten = (req, res) => {
         }
     });
 };
+const getBerichtByField = (req, res) => {
+    const field = req.query.field;
+    const value = req.query.value;
+
+    console.log("Received field:", field);
+    console.log("Received value:", value);
+
+    Bericht.getByField(field, value, (err, data) => {
+        if (err) {
+            console.error("Error in getByField:", err);
+            if (err.kind === 'not_found') {
+                res.status(404).send({
+                    message: `Bericht with ${field} ${value} not found.`,
+                });
+            } else {
+                res.status(500).send({
+                    message: `Error getting bericht by ${field} ${value}.`,
+                });
+            }
+        } else {
+            res.send(data);
+        }
+    });
+};
+
 
 const getBerichtById = (req, res) => {
     const berichtId = req.params.id;
@@ -128,5 +152,6 @@ module.exports = {
     getBerichtById,
     updateBerichtById,
     deleteBerichtById,
-    getAllBerichtenWithLimitAndOffset
+    getAllBerichtenWithLimitAndOffset,
+    getBerichtByField
 };

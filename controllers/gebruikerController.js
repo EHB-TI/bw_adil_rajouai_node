@@ -109,8 +109,7 @@ const getGebruikerByField = (req, res) => {
     const field = req.query.field;
     const value = req.query.value;
 
-    console.log("Received field:", field);
-    console.log("Received value:", value);
+    
 
     Gebruiker.getByField(field, value, (err, data) => {
         if (err) {
