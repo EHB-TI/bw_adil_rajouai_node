@@ -14,6 +14,7 @@ const createGebruiker = (req, res) => {
     newGebruiker.leeftijd = parseInt(newGebruiker.leeftijd, 10);
     newGebruiker.nummer = parseInt(newGebruiker.nummer, 10);
 
+
     if (isNaN(newGebruiker.leeftijd) || isNaN(newGebruiker.nummer)) {
         return res.status(400).send({
             message: 'Leeftijd en nummer moeten geldige getallen zijn.',
@@ -26,6 +27,7 @@ const createGebruiker = (req, res) => {
         });
     }
 
+
     Gebruiker.create(newGebruiker, (err, data) => {
         if (err) {
             res.status(500).send({
@@ -36,6 +38,9 @@ const createGebruiker = (req, res) => {
         }
     });
 };
+
+
+
 
 const getAllGebruikers = (req, res) => {
     Gebruiker.getAll((err, data) => {
@@ -159,6 +164,7 @@ module.exports = {
     updateGebruikerById,
     deleteGebruikerById,
     getAllGebruikersWithLimitAndOffset,
-    getGebruikerByField
+    getGebruikerByField,
+    
 
 };
